@@ -18,6 +18,7 @@ The markup language is designed to be easily readable and writeable by humans wh
 - Parser
 	- Requirements
 	- How to Use
+	- Data Structure
 
 <!-- /MarkdownTOC -->
 
@@ -185,3 +186,8 @@ After loading the text file into the parser, you can use the following commands 
 -	**module**: Outputs a list of connections and parameters for a specific module.
 - **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc).
 - **export**: Generates a JSON file based on the input text file.
+
+------
+## Data Structure
+
+![Patchbook Data Structure](/Images/datastructure.png?raw=true)
