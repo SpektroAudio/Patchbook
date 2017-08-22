@@ -1,3 +1,5 @@
+![Patchbook Logo](/Images/patchbook-logo.jpg)
+
 # About PatchBook:
 
 PatchBook is a markup language and parser for writing and distributing patches for modular synthesizers created by [Spektro Audio](http://spektroaudio.com/).
