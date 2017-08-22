@@ -225,6 +225,8 @@ def askCommand():
         exportJSON()
     elif command == "connections":
         printConnetions()
+    elif command == "mermaid":
+        mermaid()
     else:
         print("Invalid command, please try again.")
     askCommand()
@@ -290,6 +292,24 @@ def exportJSON():
     with open(filepath, 'w') as fp:
         json.dump(mainDict, fp)
 
+def mermaid():
+    print("Generating signal flow code for Mermaid.")
+    print("Copy the code between the line break and paste it into https://mermaidjs.github.io/mermaid-live-editor/ to download a SVG chart.")
+    string = ""
+    print("-------------------------")
+    print("graph LR;")
+    for module in mainDict:
+                # Get all outgoing connections:
+                connections = mainDict[module]["connections"]["out"]
+                for c in connections:
+                    connection = connections[c]
+                    for subc in connection:
+                        # print(connection)
+                        subString = module.title().replace(" ", "") + "-->|" + c.title() + " > " + subc[1].title().replace(" ", "") + "|" + subc[0].title().replace(" ", "") + ";"
+                        print(subString)
+    print("-------------------------")
+    print()
+
 
 def printDict():
     global mainDict
@@ -299,5 +319,5 @@ def printDict():
 
 if __name__ == "__main__":
     initial_print()
-    parseFile(getFilePath(filename))
+    parseFile(filename)
     askCommand()

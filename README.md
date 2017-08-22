@@ -179,13 +179,15 @@ The PatchBook parser is a Python program that can read text files written in the
 
 To use the parser, download the python script, open the terminal and use the command:
 
-```python3 path/to/script/patchbook.py -file relative/path/to/textfile.txt```
+```python3 path/to/script/patchbook.py -file /path/to/textfile.txt```
 
 After loading the text file into the parser, you can use the following commands to process it:
 
 -	**module**: Outputs a list of connections and parameters for a specific module.
 - **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc).
 - **export**: Generates a JSON file based on the input text file.
+- **mermaid**: Generates a code that can be copied to pasted into the [Mermaid Live Editor](https://mermaidjs.github.io/mermaid-live-editor/) to generate a signal flow chart for the patch (that can be downloaded as an SVG file).
+![Example 1 signal flow generated using Mermaid](/Images/mermaid-signal-flow.png?raw=true)
 
 ------
 ## Data Structure
