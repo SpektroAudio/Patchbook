@@ -71,6 +71,7 @@ Examples:
 
 - The manufacture's name should only be included if the module's name is too generic (example: VB Modular ADSR).
 - Non-modular equipment (such as audio interfaces, recorders, and other synths) should be written in all caps: NAME OF GEAR (Input or Output).
+- While specific module names are preferable, they can also be replaced by more generic names such as VCA, ADSR, Oscillator, etc.
 
 ---
 
