@@ -293,6 +293,10 @@ def exportJSON():
         json.dump(mainDict, fp)
 
 def mermaid():
+    linetypes = {
+    "audio" : "-->",
+    "cv" : ""
+    }
     print("Generating signal flow code for Mermaid.")
     print("Copy the code between the line break and paste it into https://mermaidjs.github.io/mermaid-live-editor/ to download a SVG chart.")
     string = ""
@@ -304,8 +308,13 @@ def mermaid():
                 for c in connections:
                     connection = connections[c]
                     for subc in connection:
-                        # print(connection)
-                        subString = module.title().replace(" ", "") + "-->|" + c.title() + " > " + subc[1].title().replace(" ", "") + "|" + subc[0].title().replace(" ", "") + ";"
+                        if subc[2] == "pitch":
+                            line = "-->|" + c.title() + " > " + subc[1].title().replace(" ", "") + "|"
+                        elif subc[2] == "audio":
+                            line = "==." + c.title() + " > " + subc[1].title().replace(" ", "") + ".==>"
+                        else:
+                            line = "-." + c.title() + " > " + subc[1].title().replace(" ", "") + ".->"
+                        subString = module.title().replace(" ", "") + line + subc[0].title().replace(" ", "") + ";"
                         print(subString)
     print("-------------------------")
     print()
