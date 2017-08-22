@@ -191,3 +191,10 @@ After loading the text file into the parser, you can use the following commands 
 ## Data Structure
 
 ![Patchbook Data Structure](/Images/datastructure.png?raw=true)
+
+-----
+
+Patchbook was created by Ícaro Ferre / Spektro Audio.  
+Twitter: @icaroferre / @spektroaudio  
+http://spektroaudio.com/  
+
