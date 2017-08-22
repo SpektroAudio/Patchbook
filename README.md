@@ -178,7 +178,7 @@ The PatchBook parser is a Python program that can read text files written in the
 
 To use the parser, download the python script, open the terminal and use the command:
 
-```python3 path/to/script/patchbook.py -file /path/to/textfile.txt```
+```python3 path/to/script/patchbook.py -file relative/path/to/textfile.txt```
 
 After loading the text file into the parser, you can use the following commands to process it:
 
