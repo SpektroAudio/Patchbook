@@ -327,7 +327,7 @@ def graphviz():
                 except KeyError:
                     pass
                 in_formatted = "_" + re.sub('[^A-Za-z0-9]+', '', c[1])
-                connection_line = module.replace(" ", "") + ":" + out_formatted + " -> " + c[0].replace(" ", "") + ":" + in_formatted + line_style
+                connection_line = module.replace(" ", "") + ":" + out_formatted + ":e  -> " + c[0].replace(" ", "") + ":" + in_formatted + ":w " + line_style
                 conn.append([c[2], connection_line])
 
         # Get all incoming connections:
