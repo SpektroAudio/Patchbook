@@ -224,7 +224,7 @@ def askCommand():
     elif command == "export":
         exportJSON()
     elif command == "connections":
-        printConnetions()
+        printConnections()
     elif command == "mermaid":
         mermaid()
     else:
@@ -263,7 +263,7 @@ def detailModule():
         print("-------")
 
 
-def printConnetions():
+def printConnections():
     print()
     print("Printing all connections by type...")
     print()
