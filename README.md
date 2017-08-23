@@ -6,7 +6,7 @@ PatchBook is a markup language and parser for writing and distributing patches f
 The markup language is designed to be easily readable and writeable by humans while the parser can process .txt files written in the PatchBook format and output a JSON file that can be used by other applications to display and process the patch's data.
 
 **Patchbook Version:** 1.0  
-**Parser version:** b1
+**Parser version:** b2
 
 **Table of Content:**
 
@@ -189,8 +189,8 @@ After loading the text file into the parser, you can use the following commands 
 -	**module**: Outputs a list of connections and parameters for a specific module.
 - **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc).
 - **export**: Generates a JSON file based on the input text file.
-- **mermaid**: Generates a code that can be copied to pasted into the [Mermaid Live Editor](https://mermaidjs.github.io/mermaid-live-editor/) to generate a signal flow chart for the patch (that can be downloaded as an SVG file).
-![Example 1 signal flow generated using Mermaid](/Images/mermaid-signal-flow.png?raw=true)
+- **graph**: Generates a code that can be copied to pasted into the [Graphiz Online editor](https://dreampuf.github.io/GraphvizOnline/) to generate a signal flow chart for the patch (that can be downloaded as a SVG or PNG file).
+![Example syncpll signal flow generated using Mermaid](/Images/graphviz-signal-flow.png?raw=true)
 
 ------
 ## Data Structure

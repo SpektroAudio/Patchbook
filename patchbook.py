@@ -11,19 +11,19 @@ import argparse
 import json
 
 # Parser INFO
-parserVersion = "b1"
+parserVersion = "b2"
 
 # Reset main dictionary
 mainDict = {}
 
 # Available connection types
 connectionTypes = {
-    "->" : "audio",
+    "->": "audio",
     ">>": "cv",
     "p>": "pitch",
     "g>": "gate",
     "t>": "trigger",
-    "c>" : "clock"
+    "c>": "clock"
 }
 
 
@@ -224,9 +224,9 @@ def askCommand():
     elif command == "export":
         exportJSON()
     elif command == "connections":
-        printConnetions()
-    elif command == "mermaid":
-        mermaid()
+        printConnections()
+    elif command == "graph":
+        graphviz()
     else:
         print("Invalid command, please try again.")
     askCommand()
@@ -263,7 +263,7 @@ def detailModule():
         print("-------")
 
 
-def printConnetions():
+def printConnections():
     print()
     print("Printing all connections by type...")
     print()
@@ -292,33 +292,67 @@ def exportJSON():
     with open(filepath, 'w') as fp:
         json.dump(mainDict, fp)
 
-def mermaid():
+
+def graphviz():
     linetypes = {
-    "audio" : "-->",
-    "cv" : ""
+        "audio": "[style=bold]",
+        "cv": "[color=gray]",
+        "gate": "[color=red, style=dashed]",
+        "trigger": "[color=orange, style=dashed]",
+        "pitch": "[color=blue]",
+        "clock": "[color=purple, style=dashed]"
     }
-    print("Generating signal flow code for Mermaid.")
-    print("Copy the code between the line break and paste it into https://mermaidjs.github.io/mermaid-live-editor/ to download a SVG chart.")
-    string = ""
+    print("Generating signal flow code for GraphViz.")
+    print("Copy the code between the line break and paste it into https://dreampuf.github.io/GraphvizOnline/ to download a SVG / PNG chart.")
+    conn = []
     print("-------------------------")
-    print("graph LR;")
-    for module in mainDict:
-                # Get all outgoing connections:
-                connections = mainDict[module]["connections"]["out"]
-                for c in connections:
-                    connection = connections[c]
-                    for subc in connection:
-                        if subc[2] == "pitch":
-                            line = "-->|" + c.title() + " > " + subc[1].title().replace(" ", "") + "|"
-                        elif subc[2] == "audio":
-                            line = "==." + c.title() + " > " + subc[1].title().replace(" ", "") + ".==>"
-                        else:
-                            line = "-." + c.title() + " > " + subc[1].title().replace(" ", "") + ".->"
-                        subString = module.title().replace(" ", "") + line + subc[0].title().replace(" ", "") + ";"
-                        print(subString)
+    print("digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;")
+    for module in sorted(mainDict):
+
+        # Get all outgoing connections:
+        outputs = mainDict[module]["connections"]["out"]
+        module_outputs = ""
+        out_count = 0
+        for out in sorted(outputs):
+            out_count += 1
+            out_formatted = "_" + re.sub('[^A-Za-z0-9]+', '', out)
+            module_outputs += "<" + out_formatted + "> " + out.upper()
+            if out_count < len(outputs.keys()):
+                module_outputs += " | "
+            connections = outputs[out]
+            for c in connections:
+                line_style = ""
+                try:
+                    line_style = linetypes[c[2]]
+                except KeyError:
+                    pass
+                in_formatted = "_" + re.sub('[^A-Za-z0-9]+', '', c[1])
+                connection_line = module.replace(" ", "") + ":" + out_formatted + " -> " + c[0].replace(" ", "") + ":" + in_formatted + line_style
+                conn.append([c[2], connection_line])
+
+        # Get all incoming connections:
+        inputs = mainDict[module]["connections"]["in"]
+        module_inputs = ""
+        in_count = 0
+        for inp in sorted(inputs):
+            inp_formatted = "_" + re.sub('[^A-Za-z0-9]+', '', inp)
+            in_count += 1
+            module_inputs += "<" + inp_formatted + "> " + inp.upper()
+            if in_count < len(inputs.keys()):
+                module_inputs += " | "
+
+
+        final_box = module.replace(" ", "") + "[label=\"{ {" + module_inputs + "}|{" + module.upper() + "}| {" + module_outputs + "}}\"  shape=Mrecord]";
+        print(final_box)
+
+    # Print Connections
+    for c in sorted(conn):
+        print(c[1])
+
+    print("}")
+
     print("-------------------------")
     print()
-
 
 def printDict():
     global mainDict
