@@ -305,8 +305,10 @@ def graphviz():
     print("Generating signal flow code for GraphViz.")
     print("Copy the code between the line break and paste it into https://dreampuf.github.io/GraphvizOnline/ to download a SVG / PNG chart.")
     conn = []
+    total_string = ""
     print("-------------------------")
     print("digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;")
+    total_string += "digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;\n"
     for module in sorted(mainDict):
 
         # Get all outgoing connections:
@@ -344,15 +346,19 @@ def graphviz():
 
         final_box = module.replace(" ", "") + "[label=\"{ {" + module_inputs + "}|{" + module.upper() + "}| {" + module_outputs + "}}\"  shape=Mrecord]";
         print(final_box)
+        total_string += final_box + "; "
 
     # Print Connections
     for c in sorted(conn):
         print(c[1])
+        total_string += c[1] + "; "
 
     print("}")
+    total_string += "}"
 
     print("-------------------------")
     print()
+    return total_string
 
 def printDict():
     global mainDict

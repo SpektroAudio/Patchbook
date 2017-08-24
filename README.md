@@ -189,7 +189,8 @@ After loading the text file into the parser, you can use the following commands 
 -	**module**: Outputs a list of connections and parameters for a specific module.
 - **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc).
 - **export**: Generates a JSON file based on the input text file.
-- **graph**: Generates a code that can be copied to pasted into the [Graphiz Online editor](https://dreampuf.github.io/GraphvizOnline/) to generate a signal flow chart for the patch (that can be downloaded as a SVG or PNG file).
+- **graph**: Generates a code that can be copied to pasted into the [Graphiz Online editor](https://dreampuf.github.io/GraphvizOnline/) to generate a signal flow chart for the patch (that can be downloaded as a SVG or PNG file). Non-programmers have the option to use the [Patchbook to GraphViz Online Converter](https://patchbook-converter.herokuapp.com) to create flowcharts without having to install Python and use the parser.
+
 ![Example syncpll signal flow generated using Mermaid](/Images/graphviz-signal-flow.png?raw=true)
 
 ------
