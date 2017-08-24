@@ -40,7 +40,7 @@ Examples:
 - VOICE 1:
 - LEAD:
 
-Every connection described after a voice anotation will be assigned to that voice.
+Every connection described after a voice annotation will be assigned to that voice.
 
 ---
 
@@ -69,7 +69,7 @@ Examples:
 
 **Additional info:**
 
-- The manufacture's name should only be included if the module's name is too generic (example: VB Modular ADSR).
+- The manufacturer's name should only be included if the module's name is too generic (example: VB Modular ADSR).
 - Non-modular equipment (such as audio interfaces, recorders, and other synths) should be written in all caps: NAME OF GEAR (Input or Output).
 - While specific module names are preferable, they can also be replaced by more generic names such as VCA, ADSR, Oscillator, etc.
 
@@ -90,7 +90,7 @@ Parameters can be annotated in 2 different ways: single line or multiline. Every
 	
 **Additional info**
 
-- Parameter values can be written as knob / fader position (percentage), specific value followed by unit (5Hz, 10ms, etc), or as a descriptive value (fast, slow, simple, complex, short, long).
+- Parameter values can be written as knob / fader position (percentage), specific value followed by unit (5Hz, 10ms, etc.), or as a descriptive value (fast, slow, simple, complex, short, long).
 - Parameters are not assigned to any voice since the same module can be used in multiple voices. 
  
 
@@ -186,8 +186,8 @@ To use the parser, download the python script, open the terminal and use the com
 
 After loading the text file into the parser, you can use the following commands to process it:
 
--	**module**: Outputs a list of connections and parameters for a specific module.
-- **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc).
+- **module**: Outputs a list of connections and parameters for a specific module.
+- **connections**: Prints a list of all connections organized by type (pitch, gate, clock, etc.).
 - **export**: Generates a JSON file based on the input text file.
 - **graph**: Generates a code that can be copied to pasted into the [Graphiz Online editor](https://dreampuf.github.io/GraphvizOnline/) to generate a signal flow chart for the patch (that can be downloaded as a SVG or PNG file).
 ![Example syncpll signal flow generated using Mermaid](/Images/graphviz-signal-flow.png?raw=true)
