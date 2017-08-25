@@ -343,20 +343,25 @@ def graphviz():
             if in_count < len(inputs.keys()):
                 module_inputs += " | "
 
-
         # Get all parameters:
         params = mainDict[module]["parameters"]
         module_params = ""
-        in_count = 0
-        for inp in sorted(params):
-            inp_formatted = "_" + re.sub('[^A-Za-z0-9]+', '', inp)
-            in_count += 1
-            module_params += inp.title() + " = " + params[inp]
-            if in_count < len(params.keys()):
+        param_count = 0
+        for par in sorted(params):
+            param_count += 1
+            module_params += par.title() + " = " + params[par]
+            if param_count < len(params.keys()):
                 module_params += r'\n'
 
+        # If module contains parameters
+        if module_params != "":
+            # Add them below module name
+            middle = "{{" + module.upper() + "}|{" + module_params + "}}"
+        else:
+            # Otherwise just display module name
+            middle = module.upper()
 
-        final_box = module.replace(" ", "") + "[label=\"{ {" + module_inputs + "}|{{" + module.upper() + "}|{" + module_params + "}}| {" + module_outputs + "}}\"  shape=Mrecord]";
+        final_box = module.replace(" ", "") + "[label=\"{ {" + module_inputs + "}|" + middle + "| {" + module_outputs + "}}\"  shape=Mrecord]";
         print(final_box)
         total_string += final_box + "; "
 
