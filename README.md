@@ -5,8 +5,8 @@
 PatchBook is a markup language and parser for writing and distributing patches for modular synthesizers created by [Spektro Audio](http://spektroaudio.com/).
 The markup language is designed to be easily readable and writeable by humans while the parser can process .txt files written in the PatchBook format and output a JSON file that can be used by other applications to display and process the patch's data.
 
-**Patchbook Version:** 1.0  
-**Parser version:** b2
+**Patchbook Version:** 1.1  
+**Parser version:** b3
 
 **Table of Content:**
 
@@ -16,6 +16,7 @@ The markup language is designed to be easily readable and writeable by humans wh
 	- Voices
 	- Connections
 	- Parameters
+	- Comments:
 	- Examples
 - Parser
 	- Requirements
@@ -49,8 +50,10 @@ Every connection described after a voice annotation will be assigned to that voi
 Every connection (patch cable) must be annotated using the following format: **- Output Module (Output Label) >> Input Module (Input Label)**.  
 Examples:  
 
+```
 - Maths (Ch. 1 Unity) >> Polaris (CV 2)
 - Tides (Bi) >> Braids (Timbre)
+```
 
 While the >> indicator can be used to indicate a standard connection, it could (and should) also be replaced by more specific indicators according to the kind of signal being sent from the Output Module to the Input Module:  
 
@@ -63,15 +66,26 @@ While the >> indicator can be used to indicate a standard connection, it could (
 
 Examples:
 
+```
 - Metropolis (Pitch) p> Braids (1 V/Oct)
 - Pamela's Workout (1) c> Penta (Clk)
 - Braids (Out) -> Polaris (Input)
+```
 
 **Additional info:**
 
 - The manufacturer's name should only be included if the module's name is too generic (example: VB Modular ADSR).
 - Non-modular equipment (such as audio interfaces, recorders, and other synths) should be written in all caps: NAME OF GEAR (Input or Output).
 - While specific module names are preferable, they can also be replaced by more generic names such as VCA, ADSR, Oscillator, etc.
+
+**Extra arguments:**
+
+Additional GraphViz arguments such as color, weight, and style can be appended to the connection line in between brackets and separated by commas. 
+
+Example:
+```
+- Metropolis (Pitch) p> Braids (1 V/Oct) [color=red, weight=3]
+```
 
 ---
 
@@ -80,19 +94,34 @@ Examples:
 Parameters can be annotated in 2 different ways: single line or multiline. Every parameter annotation must start with an asterisk character before the module name.
 
 **Single-line**  
+```
 \* Function: Rise = 50% | Fall = 50% | Curve = 30%
+```
 
-**Multi-Line**  
+**Multi-Line**
+```
 \* Braids:  
 	| Mode = CSAW  
 	| Color = 50%  
 	| Timbre = 50%  
-	
+```
+
 **Additional info**
 
 - Parameter values can be written as knob / fader position (percentage), specific value followed by unit (5Hz, 10ms, etc.), or as a descriptive value (fast, slow, simple, complex, short, long).
 - Parameters are not assigned to any voice since the same module can be used in multiple voices. 
  
+---
+
+## Comments:
+
+Comments can be added to the patch by prepending two forward slashes (//). 
+
+Example:
+
+```
+// This is a nice comment
+```
 
 ---
 
@@ -104,7 +133,7 @@ Parameters can be annotated in 2 different ways: single line or multiline. Every
 
 ```
 VOICE 1:
-	- Metropolis (Pitch) p> Braids (1v/oct)
+	- Metropolis (Pitch) p> Braids (1v/oct) [weight=3]
 	- Metropolis (Gate) g> Function (Trigger)
 	- Braids (Out) -> Optomix (Ch1 Signal)
 	- Function (+ Out) >> Optomix (Ch1 CV)
@@ -182,7 +211,9 @@ The PatchBook parser is a Python program that can read text files written in the
 
 To use the parser, download the python script, open the terminal and use the command:
 
-```python3 path/to/script/patchbook.py -file /path/to/textfile.txt```
+```
+python3 path/to/script/patchbook.py -file /path/to/textfile.txt
+```
 
 After loading the text file into the parser, you can use the following commands to process it:
 
@@ -191,14 +222,14 @@ After loading the text file into the parser, you can use the following commands 
 - **export**: Generates a JSON file based on the input text file.
 - **graph**: Generates a code that can be copied to pasted into the [Graphiz Online editor](https://dreampuf.github.io/GraphvizOnline/) to generate a signal flow chart for the patch (that can be downloaded as a SVG or PNG file). Non-programmers have the option to use the [Patchbook to GraphViz Online Converter](https://patchbook-converter.herokuapp.com) to create flowcharts without having to install Python and use the parser.
 
-![Example syncpll signal flow generated using Mermaid](/Images/graphviz-signal-flow.png?raw=true)
+![Example syncpll signal flow generated using GraphViz](/Images/graphviz-signal-flow.png?raw=true)
 
 ------
 ## Data Structure
 
 ![Patchbook Data Structure](/Images/datastructure.png?raw=true)
 
------
+----
 
 Patchbook was created by Ícaro Ferre / Spektro Audio.  
 Twitter: @icaroferre / @spektroaudio  

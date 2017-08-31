@@ -1,10 +1,9 @@
 VOICE 1:
-	- Metropolis (Pitch) p> Braids (1voct)
+	- Metropolis (Pitch) p> Braids (1voct) [weight=3]
 	- Metropolis (Gate) g> Function (Trigger)
 	- Braids (Out) -> Optomix (Ch1 Signal)
 	- Function (PosOut) >> Optomix (Ch1 CV)
 	- Function (NegOut) >> Braids (Timbre CV)
-	
 	* Metropolis:
 	| BPM = 124
 	| Swing = 0
