@@ -87,6 +87,8 @@ Example:
 - Metropolis (Pitch) p> Braids (1 V/Oct) [color=red, weight=3]
 ```
 
+Supported GraphViz arguments: color, weight, style, dir, and arrowtail.
+
 ---
 
 ## Parameters
