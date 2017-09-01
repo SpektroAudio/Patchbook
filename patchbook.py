@@ -110,7 +110,7 @@ def regexLine(line):
     # CHECK FOR COMMENTS
     if debugMode:
         print("Checking input for comments...")
-    re_filter = re.compile(r"^\/\/\s(.+)$")  # Regex for "// Comments"
+    re_filter = re.compile(r"^\/\/\s?(.+)$")  # Regex for "// Comments"
     re_results = re_filter.search(line.strip())
     try:
         comment = re_results.group().replace("//", "").strip()
