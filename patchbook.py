@@ -42,6 +42,8 @@ parser.add_argument("-file", type=str, default="",
                     help="Name of the text file that will be parsed (including extension)")
 parser.add_argument("-debug", type=int, default=0,
                     help="Enable Debugging Mode")
+parser.add_argument("-dir", type=str, default="LR",
+                    help="LR or DN")
 parser.add_argument("-modules", action="store_const", const="modules", dest="command",
                     help="Print all modules")
 parser.add_argument("-print", action="store_const", const="print", dest="command",
@@ -55,6 +57,7 @@ parser.add_argument("-graph", action="store_const", const="graph", dest="command
 args = parser.parse_args()
 filename = args.file
 debugMode = args.debug
+direction = args.dir
 if args.command:
     one_shot_command = args.command
     quiet = True
@@ -443,7 +446,7 @@ def exportJSON():
 
 
 def graphviz():
-    global quiet
+    global quiet, direction
     linetypes = {
         "audio": {"style": "bold"},
         "cv": {"color": "gray"},
@@ -452,14 +455,22 @@ def graphviz():
         "pitch": {"color": "blue"},
         "clock": {"color": "purple", "style": "dashed"}
     }
+    if direction == "DN":
+        rank_dir = ""
+        from_token = ":n  -> "
+        to_token = ":s  "
+    else:
+        rank_dir = "rankdir = LR;\n"
+        from_token = ":e  -> "
+        to_token = ":w  "
     if not quiet:
         print("Generating signal flow code for GraphViz.")
         print("Copy the code between the line break and paste it into https://dreampuf.github.io/GraphvizOnline/ to download a SVG / PNG chart.")
     conn = []
     total_string = ""
     if not quiet: print("-------------------------")
-    print("digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;")
-    total_string += "digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;\n"
+    print("digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;")
+    total_string += "digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;\n"
     for module in sorted(mainDict["modules"]):
         # Get all outgoing connections:
         outputs = mainDict["modules"][module]["connections"]["out"]
@@ -488,9 +499,9 @@ def graphviz():
                     line_style = ""
                 in_formatted = "_" + \
                     re.sub('[^A-Za-z0-9]+', '', c["input_port"])
-                connection_line = module.replace(" ", "") + ":" + out_formatted + ":e  -> " + \
+                connection_line = module.replace(" ", "") + ":" + out_formatted + to_token + \
                     c["input_module"].replace(
-                        " ", "") + ":" + in_formatted + ":w " + line_style
+                        " ", "") + ":" + in_formatted + from_token + line_style
                 conn.append([c["input_port"], connection_line])
 
         # Get all incoming connections:
