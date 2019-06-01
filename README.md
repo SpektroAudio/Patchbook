@@ -5,7 +5,7 @@
 PatchBook is a markup language and parser for writing and distributing patches for modular synthesizers created by [Spektro Audio](http://spektroaudio.com/).
 The markup language is designed to be easily readable and writeable by humans while the parser can process .txt files written in the PatchBook format and output a JSON file that can be used by other applications to display and process the patch's data.
 
-**Patchbook Version:** 1.1  
+**Patchbook Version:** 1.2
 **Parser version:** b3
 
 **Table of Content:**
@@ -80,7 +80,7 @@ Examples:
 
 **Extra arguments:**
 
-Additional GraphViz arguments such as color, weight, and style can be appended to the connection line in between brackets and separated by commas. 
+Additional GraphViz arguments such as color, weight, and style can be appended to the connection line in between brackets and separated by commas.
 
 Example:
 ```
@@ -111,13 +111,13 @@ Parameters can be annotated in 2 different ways: single line or multiline. Every
 **Additional info**
 
 - Parameter values can be written as knob / fader position (percentage), specific value followed by unit (5Hz, 10ms, etc.), or as a descriptive value (fast, slow, simple, complex, short, long).
-- Parameters are not assigned to any voice since the same module can be used in multiple voices. 
- 
+- Parameters are not assigned to any voice since the same module can be used in multiple voices.
+
 ---
 
 ## Comments:
 
-Comments can be added to the patch by prepending two forward slashes (//). 
+Comments can be added to the patch by prepending two forward slashes (//).
 
 Example:
 
@@ -141,7 +141,7 @@ VOICE 1:
 	- Function (+ Out) >> Optomix (Ch1 CV)
 	- Function (- Out) >> Braids (Timbre CV)
 	- Optomix (Out 1) -> AUDIO INTERFACE (input)
-	
+
 	* Metropolis:
 	| BPM = 124
 	| Swing = 0
@@ -149,7 +149,7 @@ VOICE 1:
 	| Scale = Minor
 	| Mode = F. Forward
 	| Stages = 16
-	
+
 	* Braids:
 	| Mode = Fold
 	| Timbre = 30%
@@ -168,14 +168,14 @@ VOICE 1:
 	- Metropolis (Pitch) p> Aether VCO (CV)
 	- Metropolis (Gate) g> Maths (Ch 1 Trigger)
 	- Metropolis (Gate) g> Maths (Ch 4 Trigger)
-	
+
 	* Aether VCO: LFO Freq = 5 | LFO PWM = 7
 	- Aether VCO (Pulse) -> Mixer (Ch1)
 	- Aether VCO (Sub 1) -> Tides (Clk)
 	- Tides (Bi) -> Mixer (Ch2)
 	- Aether VCO (Sub 2) -> Z3000 (HSync)
 	- Z3000 (Saw) -> Mixer (Ch3)
-	
+
 	- MultiLFO (LFO 1) >> Tides (Smoothness)
 	- MultiLFO (LFO 2 Triangle) >> Tides (Shape)
 	- MultiLFO (LFO 3 Triangle) >> Z3000 (PWM)
@@ -187,10 +187,10 @@ VOICE 1:
 	| LFO 3 Freq = 1
 	* Tides: PLL Mode = True | Freq = 60% | Smoothness = 70%
 	* Z3000: Freq = 1pm
-	
+
 	- Maths (Ch 1) >> Multifilter (CV)
 	- Maths (Ch 4) >> uVCA (Ch1 CV)
-	
+
 	- Mixer (Output) -> Multifilter (Input)
 	- Multifilter (LPF) -> uVCA (Ch1 Input)
 	- uVCA (Ch1 Output) -> AUDIO INTERFACE (In 3)
@@ -226,6 +226,19 @@ After loading the text file into the parser, you can use the following commands 
 
 ![Example syncpll signal flow generated using GraphViz](/Images/graphviz-signal-flow.png?raw=true)
 
+Alternatively, any of the above commands may be invoked on the command line with a dash prefix, in which case the text file is parsed, the command is executed, and the program exits. This makes it possible to produce (for example) an SVG file in one step like so:
+
+```
+python3 path/to/script/patchbook.py -file /path/to/textfile.txt -graph | dot -Tsvg /path/to/svgfile.svg
+```
+
+Graphs are constructed horizontally left-to-right by default, but you may use the **-dir** option to change the direction of the graph to vertical top-to-bottom like so:
+
+```
+python3 path/to/script/patchbook.py -file /path/to/textfile.txt -graph -dir DN
+```
+
+
 ------
 ## Data Structure
 
@@ -236,4 +249,3 @@ After loading the text file into the parser, you can use the following commands 
 Patchbook was created by Ícaro Ferre / Spektro Audio.  
 Twitter: @icaroferre / @spektroaudio  
 http://spektroaudio.com/  
-
