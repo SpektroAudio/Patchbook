@@ -457,8 +457,8 @@ def graphviz():
     }
     if direction == "DN":
         rank_dir = ""
-        from_token = ":n  -> "
-        to_token = ":s  "
+        from_token = ":s  -> "
+        to_token = ":n  "
     else:
         rank_dir = "rankdir = LR;\n"
         from_token = ":e  -> "
@@ -499,9 +499,9 @@ def graphviz():
                     line_style = ""
                 in_formatted = "_" + \
                     re.sub('[^A-Za-z0-9]+', '', c["input_port"])
-                connection_line = module.replace(" ", "") + ":" + out_formatted + to_token + \
+                connection_line = module.replace(" ", "") + ":" + out_formatted + from_token + \
                     c["input_module"].replace(
-                        " ", "") + ":" + in_formatted + from_token + line_style
+                        " ", "") + ":" + in_formatted + to_token + line_style
                 conn.append([c["input_port"], connection_line])
 
         # Get all incoming connections:
