@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 PATCHBOOK MARKUP LANGUAGE & PARSER
 CREATED BY SPEKTRO AUDIO
@@ -41,9 +42,29 @@ parser.add_argument("-file", type=str, default="",
                     help="Name of the text file that will be parsed (including extension)")
 parser.add_argument("-debug", type=int, default=0,
                     help="Enable Debugging Mode")
+parser.add_argument("-dir", type=str, default="LR",
+                    help="LR or DN")
+parser.add_argument("-modules", action="store_const", const="modules", dest="command",
+                    help="Print all modules")
+parser.add_argument("-print", action="store_const", const="print", dest="command",
+                    help="Print data structure")
+parser.add_argument("-export", action="store_const", const="export", dest="command",
+                    help="Print JSON")
+parser.add_argument("-connections", action="store_const", const="connections", dest="command",
+                    help="Print connections")
+parser.add_argument("-graph", action="store_const", const="graph", dest="command",
+                    help="Print dot code for graph")
 args = parser.parse_args()
 filename = args.file
 debugMode = args.debug
+direction = args.dir
+if args.command:
+    one_shot_command = args.command
+    quiet = True
+else:
+    one_shot_command = None
+    quiet = False
+
 connectionID = 0
 
 # Set up debugMode
@@ -54,14 +75,16 @@ else:
 
 
 def initial_print():
-    print()
-    print("██████████████████████████████")
-    print("       PATCHBOOK PARSER       ")
-    print("   Created by Spektro Audio   ")
-    print("██████████████████████████████")
-    print()
-    print("Version " + parserVersion)
-    print()
+    global quiet
+    if not quiet:
+        print()
+        print("██████████████████████████████")
+        print("       PATCHBOOK PARSER       ")
+        print("   Created by Spektro Audio   ")
+        print("██████████████████████████████")
+        print()
+        print("Version " + parserVersion)
+        print()
 
 
 def get_script_path():
@@ -83,9 +106,10 @@ def getFilePath(filename):
 
 def parseFile(filename):
     # This function reads the txt file and process each line.
+    global quiet
     lines = []
     try:
-        print("Loading file: " + filename)
+        if not quiet: print("Loading file: " + filename)
         with open(filename, "r") as file:
             for l in file:
                 lines.append(l)
@@ -94,8 +118,9 @@ def parseFile(filename):
         print("ERROR. Please add text file path after the script.")
     except FileNotFoundError:
         print("ERROR. File not found.")
-    print("File successfully processed.")
-    print()
+    if not quiet:
+        print("File successfully processed.")
+        print()
 
 
 def regexLine(line):
@@ -227,7 +252,6 @@ def addConnection(list, voice="none"):
 
     if debugMode:
         print("Adding new connection...")
-    if debugMode:
         print("-----")
 
     output_module = list[0].lower().strip()
@@ -235,7 +259,6 @@ def addConnection(list, voice="none"):
 
     if debugMode:
         print("Output module: " + output_module)
-    if debugMode:
         print("Output port: " + output_port)
 
     try:
@@ -256,7 +279,6 @@ def addConnection(list, voice="none"):
 
     if debugMode:
         print("Input module: " + input_module)
-    if debugMode:
         print("Input port: " + output_port)
 
     checkModuleExistance(output_module, output_port, "out")
@@ -325,10 +347,17 @@ def addComment(value):
     mainDict["comments"].append(value)
 
 
-def askCommand():
-    command = input("> ").lower().strip()
+def askCommand(command=None):
+    global one_shot_command
+    if one_shot_command:
+        command = one_shot_command
+    if not command:
+        command = input("> ").lower().strip()
+
     if command == "module":
         detailModule()
+    elif command == "modules":
+        detailModule(all=True)
     elif command == "print":
         printDict()
     elif command == "export":
@@ -339,39 +368,49 @@ def askCommand():
         graphviz()
     else:
         print("Invalid command, please try again.")
+
+    if one_shot_command:
+        return
     askCommand()
 
+def _print_module(module):
+    global mainDict, quiet
+    print("-------")
+    print("Showing information for module: " + module.upper())
+    print()
+    print("Inputs:")
+    for c in mainDict["modules"][module]["connections"]["in"]:
+        keyvalue = mainDict["modules"][module]["connections"]["in"][c]
+        print(keyvalue["output_module"].title() + " (" + keyvalue["output_port"].title(
+        ) + ") > " + c.title() + " - " + keyvalue["connection_type"].title())
+    print()
 
-def detailModule():
+    print("Outputs:")
+    for x in mainDict["modules"][module]["connections"]["out"]:
+        port = mainDict["modules"][module]["connections"]["out"][x]
+        for c in port:
+            keyvalue = c
+            print(x.title() + " > " + keyvalue["input_module"].title() + " (" + keyvalue["input_port"].title(
+            ) + ") " + " - " + keyvalue["connection_type"].title() + " - " + keyvalue["voice"])
+    print()
+
+    print("Parameters:")
+    for p in mainDict["modules"][module]["parameters"]:
+        value = mainDict["modules"][module]["parameters"][p]
+        print(p.title() + " = " + value)
+    print()
+
+    if not quiet: print("-------")
+
+def detailModule(all=False):
     global mainDict
-    module = input("Enter module name: ").lower()
-    if module in mainDict["modules"]:
-        print("-------")
-        print("Showing information for module: " + module.upper())
-        print()
-        print("Inputs:")
-        for c in mainDict["modules"][module]["connections"]["in"]:
-            keyvalue = mainDict["modules"][module]["connections"]["in"][c]
-            print(keyvalue["output_module"].title() + " (" + keyvalue["output_port"].title(
-            ) + ") > " + c.title() + " - " + keyvalue["connection_type"].title())
-        print()
-
-        print("Outputs:")
-        for x in mainDict["modules"][module]["connections"]["out"]:
-            port = mainDict["modules"][module]["connections"]["out"][x]
-            for c in port:
-                keyvalue = c
-                print(x.title() + " > " + keyvalue["input_module"].title() + " (" + keyvalue["input_port"].title(
-                ) + ") " + " - " + keyvalue["connection_type"].title() + " - " + keyvalue["voice"])
-        print()
-
-        print("Parameters:")
-        for p in mainDict["modules"][module]["parameters"]:
-            value = mainDict["modules"][module]["parameters"][p]
-            print(p.title() + " = " + value)
-        print()
-
-        print("-------")
+    if not all:
+        module = input("Enter module name: ").lower()
+        if module in mainDict["modules"]:
+            _print_module(module)
+    else:
+        for module in mainDict["modules"]:
+            _print_module(module)
 
 
 def printConnections():
@@ -398,14 +437,16 @@ def printConnections():
 
 def exportJSON():
     # Exports mainDict as json file
-    name = filename.split(".")[0]
-    filepath = getFilePath(name + '.json')
-    print("Exporting dictionary as file: " + filepath)
-    with open(filepath, 'w') as fp:
-        json.dump(mainDict, fp)
+    # name = filename.split(".")[0]
+    # filepath = getFilePath(name + '.json')
+    # print("Exporting dictionary as file: " + filepath)
+    # with open(filepath, 'w') as fp:
+    #     json.dump(mainDict, fp)
+    print(json.dumps(mainDict))
 
 
 def graphviz():
+    global quiet, direction
     linetypes = {
         "audio": {"style": "bold"},
         "cv": {"color": "gray"},
@@ -414,13 +455,22 @@ def graphviz():
         "pitch": {"color": "blue"},
         "clock": {"color": "purple", "style": "dashed"}
     }
-    print("Generating signal flow code for GraphViz.")
-    print("Copy the code between the line break and paste it into https://dreampuf.github.io/GraphvizOnline/ to download a SVG / PNG chart.")
+    if direction == "DN":
+        rank_dir = ""
+        from_token = ":s  -> "
+        to_token = ":n  "
+    else:
+        rank_dir = "rankdir = LR;\n"
+        from_token = ":e  -> "
+        to_token = ":w  "
+    if not quiet:
+        print("Generating signal flow code for GraphViz.")
+        print("Copy the code between the line break and paste it into https://dreampuf.github.io/GraphvizOnline/ to download a SVG / PNG chart.")
     conn = []
     total_string = ""
-    print("-------------------------")
-    print("digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;")
-    total_string += "digraph G{\nrankdir = LR;\nsplines = polyline;\nordering=out;\n"
+    if not quiet: print("-------------------------")
+    print("digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;")
+    total_string += "digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;\n"
     for module in sorted(mainDict["modules"]):
         # Get all outgoing connections:
         outputs = mainDict["modules"][module]["connections"]["out"]
@@ -449,9 +499,9 @@ def graphviz():
                     line_style = ""
                 in_formatted = "_" + \
                     re.sub('[^A-Za-z0-9]+', '', c["input_port"])
-                connection_line = module.replace(" ", "") + ":" + out_formatted + ":e  -> " + \
+                connection_line = module.replace(" ", "") + ":" + out_formatted + from_token + \
                     c["input_module"].replace(
-                        " ", "") + ":" + in_formatted + ":w " + line_style
+                        " ", "") + ":" + in_formatted + to_token + line_style
                 conn.append([c["input_port"], connection_line])
 
         # Get all incoming connections:
@@ -507,8 +557,9 @@ def graphviz():
     print("}")
     total_string += "}"
 
-    print("-------------------------")
-    print()
+    if not quiet:
+        print("-------------------------")
+        print()
     return total_string
 
 
