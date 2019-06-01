@@ -229,7 +229,7 @@ After loading the text file into the parser, you can use the following commands 
 Alternatively, any of the above commands may be invoked on the command line with a dash prefix, in which case the text file is parsed, the command is executed, and the program exits. This makes it possible to produce (for example) an SVG file in one step like so:
 
 ```
-python3 path/to/script/patchbook.py -file /path/to/textfile.txt -graph | dot -Tsvg /path/to/svgfile.svg
+python3 path/to/script/patchbook.py -file /path/to/textfile.txt -graph | dot -Tsvg > /path/to/svgfile.svg
 ```
 
 Graphs are constructed horizontally left-to-right by default, but you may use the **-dir** option to change the direction of the graph to vertical top-to-bottom like so:

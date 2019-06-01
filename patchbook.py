@@ -43,7 +43,7 @@ parser.add_argument("-file", type=str, default="",
 parser.add_argument("-debug", type=int, default=0,
                     help="Enable Debugging Mode")
 parser.add_argument("-dir", type=str, default="LR",
-                    help="LR or DN")
+                    help="Graph direction: LR (left-to-right) or DN (top-to-bottom)")
 parser.add_argument("-modules", action="store_const", const="modules", dest="command",
                     help="Print all modules")
 parser.add_argument("-print", action="store_const", const="print", dest="command",
