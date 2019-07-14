@@ -456,11 +456,11 @@ def graphviz():
         "clock": {"color": "purple", "style": "dashed"}
     }
     if direction == "DN":
-        rank_dir = ""
+        rank_dir_token = "rankdir = BT;\n"
         from_token = ":s  -> "
         to_token = ":n  "
     else:
-        rank_dir = "rankdir = LR;\n"
+        rank_dir_token = "rankdir = LR;\n"
         from_token = ":e  -> "
         to_token = ":w  "
     if not quiet:
@@ -469,8 +469,8 @@ def graphviz():
     conn = []
     total_string = ""
     if not quiet: print("-------------------------")
-    print("digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;")
-    total_string += "digraph G{\n" + rank_dir + "splines = polyline;\nordering=out;\n"
+    print("digraph G{\n" + rank_dir_token + "splines = polyline;\nordering=out;")
+    total_string += "digraph G{\n" + rank_dir_token + "splines = polyline;\nordering=out;\n"
     for module in sorted(mainDict["modules"]):
         # Get all outgoing connections:
         outputs = mainDict["modules"][module]["connections"]["out"]
