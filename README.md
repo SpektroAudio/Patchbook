@@ -57,7 +57,7 @@ Examples:
 
 While the >> indicator can be used to indicate a standard connection, it could (and should) also be replaced by more specific indicators according to the kind of signal being sent from the Output Module to the Input Module:  
 
-- >> for CV
+- \>> for CV
 - -> for Audio
 - p> for Pitch (1v/oct or Hz/V)
 - g> for Gate
